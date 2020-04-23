@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
-import { Subject, timer } from "rxjs";
+import { Subject } from "rxjs";
 
 import "./styles.css";
 import { tap, throttle } from "rxjs/operators";
@@ -37,7 +37,12 @@ export default function App() {
 
   useEffect(() => {
     clickStream
-      .pipe(throttle(() => animationCompleteStream))
+      .pipe(
+        throttle(() => animationCompleteStream, {
+          leading: true,
+          trailing: true
+        })
+      )
       .pipe(tap(assignSquareStyle))
       .subscribe();
   }, [clickStream, assignSquareStyle, animationCompleteStream]);
